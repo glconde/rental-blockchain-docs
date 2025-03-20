@@ -255,7 +255,7 @@ We will now write a function to create a basic rental agreement.
     }
 ```
 
-#### **Function Details**
+#### **Function Details for `createRental`**
 | Function Name |`createRental`|
 |------|---|
 | **Parameters** | `_propertyId`, `_tenantAddress`, `_rentAmount` |
@@ -264,7 +264,7 @@ We will now write a function to create a basic rental agreement.
 |**Storage**|Adds the rental to the `rentals` mapping with a "Pending" status|
 |**Event**|Emits `RentalCreated` for front-end tracking|
 
-
+---
 ### **Step 4: Activating the Rental**
 
 We will now write a function to cactivate the rental with the deposit and initial rent amount.
@@ -291,7 +291,7 @@ We will now write a function to cactivate the rental with the deposit and initia
     }
 ```
 
-#### **Function Details**
+#### **Function Details for `activateRental`**
 | Function Name |`activateRental`|
 |------|---|
 | **Parameters** | `_propertyId` |
@@ -303,6 +303,8 @@ We will now write a function to cactivate the rental with the deposit and initia
 |**Payment**|Transfers Ether to the owner|
 |**Event**|Logs the payment|
 
+
+---
 ### **Step 5: Pay Rent**
 
 We will write a function to allow the tenant to pay rent.
@@ -328,7 +330,7 @@ We will write a function to allow the tenant to pay rent.
         emit RentPaid(_propertyId, msg.value, block.timestamp);
     }
 ```
-#### **Function Details**
+#### **Function Details for `payRent`**
 | Function Name |`payRent`|
 |------|---|
 | **Parameters** | `_propertyId` |
@@ -340,7 +342,7 @@ We will write a function to allow the tenant to pay rent.
 |**Event**|Logs the payment|
 
 
-
+---
 ### **Step 6: End the Rental**
 
 We will create a function to allow the property manager to terminate an active rental.
@@ -363,7 +365,7 @@ We will create a function to allow the property manager to terminate an active r
     }
 ```
 
-#### **Function Details**
+#### **Function Details for `endRental`**
 | Function Name |`endRental`|
 |------|---|
 | **Parameters** | `_propertyId` |
@@ -374,8 +376,8 @@ We will create a function to allow the property manager to terminate an active r
 |**Event**|Logs the termination|
 
 
-
-### **The Final Contract**
+---
+### **The Final Contract `rentalproperty.sol`**
 
 ``` solidity
 // SPDX-License-Identifier: MIT
