@@ -653,7 +653,7 @@ After the prompts `create-next-app` will create a folder with your project name 
 
 ### Step 2: Design the frontend
 
-The frontend will be design using **JavaScript** and **CSS**. Major sections of each page will be created as reusable `components` with their independent functionality, some of which will connect to the backend servers to interact.
+The frontend will be design using **JavaScript** and **CSS**. Major sections of each page will be created as reusable `components` with their independent functionality, some of which will connect to the backend servers to interact with the SMART contract.
 
 
 
