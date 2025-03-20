@@ -108,7 +108,7 @@ contract RentalProperty {
         - End time of the rental agreement `endTime`
     - A `mapping()` data type that associates a `propertyId` with the `Rental` data
 
-```c#
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
