@@ -612,7 +612,7 @@ You can interact with your contract from the backend by calling the appropriate 
 
 - Get Rental Info: You can fetch the rental information by calling getRentalInfo(rentalId) from your contract.
 
-## **Frontend Integration**
+## **Frontend Integration with SMART Contract**
 The frontend will be built using **Next.js**, where users can browse, book rentals, and interact with smart contracts for payments and booking management.
 
 ### Step 1: Setup a Next.js project
@@ -659,35 +659,54 @@ npm install ethers @web3-react/core @web3-react/injected-connector
 
 ### Step 2: Design the frontend
 
-The frontend will be design using **JavaScript** and **CSS**. Major sections of each page will be created as reusable `components` with their independent functionality, some of which will connect to the backend servers to interact with the SMART contract.
+The frontend will be design using **JavaScript** and **CSS**. Major sections of each page will be created with reusable `components` where some of these components will interact with the SMART contract.
 
 ### Step 3: Connect front-end to SMART contract
 
 
-1. Let us create a utility file to connect to our smart contract.
+1. After deploying the contract, we will need two pieces of information to connect to the contract on the Ethereum blockchain.
+    - The **ABI** (this is generated when the contract is compiled in Ethereum)
+    - The deployed **Contract Address**
 
-backend.
+Create a directory call `lib/` and store these values in a file called `contractInfo.js`:
+
+
+```javascript
+export const contractAddress = "0xYourDeployedContractAddress";
+
+export const contractABI = [
+  // Your ABI here (example snippet)
+  {
+    "inputs": [
+      {"internalType": "string", "name": "_propertyId", "type": "string"},
+      {"internalType": "address", "name": "_tenant", "type": "address"},
+      {"internalType": "uint256", "name": "_rentAmount", "type": "uint256"},
+      {"internalType": "uint256", "name": "_depositAmount", "type": "uint256"},
+      {"internalType": "uint256", "name": "_lateFee", "type": "uint256"},
+      {"internalType": "uint256", "name": "_rentInterval", "type": "uint256"}
+    ],
+    "name": "createRental",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  // ... rest of your ABI
+];
+```
+
+2. We will then create a Web3 utitlity file in the `lib/` directory called `web3.js`:
 
 ```javascript
 import { ethers } from 'ethers';
-
-// Your contract's ABI (generated after compilation)
-const contractABI = [/* your ABI array here */];
-
-// Your deployed contract address
-const contractAddress = '0xYourContractAddress';
+import { contractAddress, contractABI } from './contractInfo';
 
 export const getContract = async () => {
-  // Check if MetaMask is installed
   if (typeof window.ethereum !== 'undefined') {
     try {
-      // Request account access
       await window.ethereum.request({ method: 'eth_requestAccounts' });
-      
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(contractAddress, contractABI, signer);
-      
       return contract;
     } catch (error) {
       console.error('Error connecting to contract:', error);
@@ -697,6 +716,225 @@ export const getContract = async () => {
     throw new Error('Please install MetaMask');
   }
 };
+
 ```
 
+3. We will then create a context for the Web3 state.
+```javascript
+import { createContext, useContext, useState, useEffect } from 'react';
+import { getContract } from '../lib/web3';
+
+const Web3Context = createContext();
+
+export function Web3Provider({ children }) {
+  const [account, setAccount] = useState(null);
+  const [contract, setContract] = useState(null);
+  const [isOwner, setIsOwner] = useState(false);
+
+  const connectWallet = async () => {
+    try {
+      const contractInstance = await getContract();
+      const signer = await contractInstance.signer;
+      const address = await signer.getAddress();
+      const owner = await contractInstance.owner();
+
+      setContract(contractInstance);
+      setAccount(address);
+      setIsOwner(address.toLowerCase() === owner.toLowerCase());
+    } catch (error) {
+      console.error('Failed to connect wallet:', error);
+    }
+  };
+
+  return (
+    <Web3Context.Provider value={{ account, contract, isOwner, connectWallet }}>
+      {children}
+    </Web3Context.Provider>
+  );
+}
+
+export const useWeb3 = () => useContext(Web3Context);
+```
+3. We will wrap our App component with a provider so that all values are passed down to all our other components.
+
+```javascript
+import { Web3Provider } from '../context/Web3Context';
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <Web3Provider>
+      <Component {...pageProps} />
+    </Web3Provider>
+  );
+}
+
+export default MyApp;
+```
+
+4. We will then update the app.js file.
+
+```javascript
+import { Web3Provider } from '../context/Web3Context';
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <Web3Provider>
+      <Component {...pageProps} />
+    </Web3Provider>
+  );
+}
+
+export default MyApp;
+```
+
+5. We can then implement a Rental component to interact with our Rental SMART contract.
+
+```javascript
+import { useState } from 'react';
+import { useWeb3 } from '../context/Web3Context';
+import { ethers } from 'ethers';
+
+export default function RentalManager() {
+  const { account, contract, isOwner, connectWallet } = useWeb3();
+  const [propertyId, setPropertyId] = useState('');
+  const [tenantAddress, setTenantAddress] = useState('');
+  const [rentAmount, setRentAmount] = useState('');
+  const [depositAmount, setDepositAmount] = useState('');
+  const [lateFee, setLateFee] = useState('');
+  const [rentInterval, setRentInterval] = useState(''); // in seconds
+
+  const createRental = async () => {
+    if (!contract || !isOwner) return;
+    try {
+      const tx = await contract.createRental(
+        propertyId,
+        tenantAddress,
+        ethers.parseEther(rentAmount),
+        ethers.parseEther(depositAmount),
+        ethers.parseEther(lateFee),
+        rentInterval
+      );
+      await tx.wait();
+      alert('Rental created successfully!');
+    } catch (error) {
+      console.error('Error creating rental:', error);
+      alert('Failed to create rental');
+    }
+  };
+
+  const activateRental = async () => {
+    if (!contract) return;
+    try {
+      const rental = await contract.rentals(propertyId);
+      const totalAmount = ethers.parseEther(rentAmount).add(ethers.parseEther(depositAmount));
+      const tx = await contract.activateRental(propertyId, { value: totalAmount });
+      await tx.wait();
+      alert('Rental activated successfully!');
+    } catch (error) {
+      console.error('Error activating rental:', error);
+      alert('Failed to activate rental');
+    }
+  };
+
+  const payRent = async () => {
+    if (!contract) return;
+    try {
+      const rental = await contract.rentals(propertyId);
+      const isLate = Date.now() / 1000 > Number(rental.rentDueDate);
+      const totalDue = isLate 
+        ? ethers.parseEther(rentAmount).add(ethers.parseEther(lateFee))
+        : ethers.parseEther(rentAmount);
+      const tx = await contract.payRent(propertyId, { value: totalDue });
+      await tx.wait();
+      alert('Rent paid successfully!');
+    } catch (error) {
+      console.error('Error paying rent:', error);
+      alert('Failed to pay rent');
+    }
+  };
+
+  const endRental = async () => {
+    if (!contract || !isOwner) return;
+    try {
+      const tx = await contract.endRental(propertyId);
+      await tx.wait();
+      alert('Rental ended and deposit refunded!');
+    } catch (error) {
+      console.error('Error ending rental:', error);
+      alert('Failed to end rental');
+    }
+  };
+
+  if (!account) {
+    return <button onClick={connectWallet}>Connect Wallet</button>;
+  }
+
+  return (
+    <div>
+      <h1>Rental Property Manager</h1>
+      <p>Connected: {account}</p>
+      <p>{isOwner ? 'Owner' : 'Tenant'} View</p>
+
+      <div>
+        <input
+          placeholder="Property ID"
+          value={propertyId}
+          onChange={(e) => setPropertyId(e.target.value)}
+        />
+        {isOwner && (
+          <>
+            <input
+              placeholder="Tenant Address"
+              value={tenantAddress}
+              onChange={(e) => setTenantAddress(e.target.value)}
+            />
+            <input
+              placeholder="Rent Amount (ETH)"
+              value={rentAmount}
+              onChange={(e) => setRentAmount(e.target.value)}
+            />
+            <input
+              placeholder="Deposit Amount (ETH)"
+              value={depositAmount}
+              onChange={(e) => setDepositAmount(e.target.value)}
+            />
+            <input
+              placeholder="Late Fee (ETH)"
+              value={lateFee}
+              onChange={(e) => setLateFee(e.target.value)}
+            />
+            <input
+              placeholder="Rent Interval (seconds)"
+              value={rentInterval}
+              onChange={(e) => setRentInterval(e.target.value)}
+            />
+            <button onClick={createRental}>Create Rental</button>
+            <button onClick={endRental}>End Rental</button>
+          </>
+        )}
+        {!isOwner && (
+          <>
+            <button onClick={activateRental}>Activate Rental</button>
+            <button onClick={payRent}>Pay Rent</button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+```
+
+6. We can then implement the Rental component in a page.
+
+```javascript
+import RentalManager from '../components/RentalManager';
+
+export default function Home() {
+  return (
+    <div>
+      <RentalManager />
+    </div>
+  );
+}
+```
 
