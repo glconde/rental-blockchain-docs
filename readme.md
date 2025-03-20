@@ -78,13 +78,13 @@ For the impementation of the SMART contract, we will be writing the contract wit
 ### **Step 1: Setting up a basic SMART contract with variables and data structures**
 1. We will first define the SPDX license identifier for the version of solidity we will be using.
 
-```c++
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0
 ;
 ```
 2. We will then define the contract by using the keyword `contract` followed by the name of the contract. For this project, we will call the contract `RentalProperty`.
-```c++
+```solidity
 pragma solidity ^0.8.0;
 
 // Contract definition
@@ -141,7 +141,7 @@ contract RentalProperty {
 
 4. We will create events to allow our front-end to listen for contract actions
 
-```c#
+```solidity
  // Event to log actions (useful for frontend)
     event RentalCreated(string propertyId, address tenant, uint256 rentAmount);
     event RentPaid(string propertyId, uint256 amount, uint256 timestamp);
@@ -150,14 +150,14 @@ contract RentalProperty {
 
 5. Finally, we will create a constructor to set contract deployer as the property manager/ landlord
 
-```c#
+```solidity
  // Constructor to set the contract deployer as the owner
  constructor() {
         owner = msg.sender;
     }
 ```
 So far , here is the complete code of our progress.
-```c++
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
@@ -206,7 +206,7 @@ Adding modifiers provide a layer of security by restricting certain functions to
 2. `onlyTenant` - ennsures that the tenant for a particular property can call certain functions
 3. `rentlActive` - checks if rental exists and is active
 
-```c++
+```solidity
 // 
     modifier onlyOwner() {
         require(msg.sender == owner, "Only the owner can call this function");
@@ -227,7 +227,7 @@ Adding modifiers provide a layer of security by restricting certain functions to
 
 We will now write a function to create a basic rental agreement.
 
-```c#
+```solidity
 // Create a rental with deposit and late fee
     function createRental(
         string memory _propertyId,
@@ -270,7 +270,7 @@ We will now write a function to create a basic rental agreement.
 
 We will now write a function to cactivate the rental with the deposit and initial rent amount.
 
-```c#
+```solidity
 // Activate rental with deposit and initial rent
     function activateRental(string memory _propertyId) public payable onlyTenant(_propertyId) whenNotPaused {
         Rental storage rental = rentals[_propertyId];
@@ -308,7 +308,7 @@ We will now write a function to cactivate the rental with the deposit and initia
 
 We will write a function to allow the tenant to pay rent.
 
-```c#
+```solidity
  // Pay rent with late fee check
     function payRent(string memory _propertyId) public payable onlyTenant(_propertyId) rentalActive(_propertyId) whenNotPaused {
         Rental storage rental = rentals[_propertyId];
@@ -346,7 +346,7 @@ We will write a function to allow the tenant to pay rent.
 
 We will create a function to allow the property manager to terminate an active rental.
 
-```c#
+```solidity
   function endRental(string memory _propertyId) public onlyOwner rentalActive(_propertyId) whenNotPaused {
         Rental storage rental = rentals[_propertyId];
         rental.status = RentalStatus.Expired;
@@ -378,7 +378,7 @@ We will create a function to allow the property manager to terminate an active r
 
 ### **The Final Contract**
 
-``` c++
+``` solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
