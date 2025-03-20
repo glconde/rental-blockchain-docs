@@ -19,11 +19,11 @@ This guide will help you set up the backend for your rental smart contract dApp 
 
 Before setting up the backend, make sure you have the following installed:
 
-- **Node.js & npm**: For backend development.
-- **Hardhat**: For smart contract deployment and management.
-- **Ethers.js**: For interacting with the Ethereum blockchain.
-- **Infura or Alchemy Account**: To connect to testnets like Polygon Mumbai.
-- **Next.js**: To build the frontend.
+- **[Node.js](https://hardhat.org/) & [npm](https://www.npmjs.com/)** - For backend development.
+- **[Hardhat](https://hardhat.org/)** - For smart contract deployment and management .
+- **Ethers.js** - For interacting with the Ethereum blockchain.
+- **[Infura](https://www.infura.io/) or [Alchemy Account](https://www.alchemy.com/)** - To connect to testnets like Polygon Mumbai.
+- **[Next.js](https://nextjs.org/)** - To build the frontend.
 
 ---
 
