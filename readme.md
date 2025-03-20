@@ -619,11 +619,16 @@ The frontend will be built using **Next.js**, where users can browse, book renta
 **System Requirements**
 
 Ensure that you have the latest version of **[Node.js](https://nodejs.org/)** installed on your computer.
-Create a directory to store the project. Open a terminal and run the following command:
+Create a directory to store the rental application project. Open a terminal and run the following command:
 ```bash
 npx create-next-app@latest
 ```
-
+Alternatively, you can also do these processes alone in the command line:
+```bash
+mkdir rental-application
+cd rental-application
+npx create-next-app@latest
+```
 On installation, you will be prompted with options for the project:
 
 ```bash
