@@ -651,11 +651,52 @@ Enter your project name and select the options listed in the table below:
 
 After the prompts `create-next-app` will create a folder with your project name and install all the necessary dependencies.
 
+we will now install the necessary dependencies to connect to our SMART contract backend.
+
+```bash
+npm install ethers @web3-react/core @web3-react/injected-connector
+```
+
 ### Step 2: Design the frontend
 
 The frontend will be design using **JavaScript** and **CSS**. Major sections of each page will be created as reusable `components` with their independent functionality, some of which will connect to the backend servers to interact.
 
+### Step 3: Connect front-end to SMART contract
 
 
+1. Let us create a utility file to connect to our smart contract.
+
+backend.
+
+```javascript
+import { ethers } from 'ethers';
+
+// Your contract's ABI (generated after compilation)
+const contractABI = [/* your ABI array here */];
+
+// Your deployed contract address
+const contractAddress = '0xYourContractAddress';
+
+export const getContract = async () => {
+  // Check if MetaMask is installed
+  if (typeof window.ethereum !== 'undefined') {
+    try {
+      // Request account access
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(contractAddress, contractABI, signer);
+      
+      return contract;
+    } catch (error) {
+      console.error('Error connecting to contract:', error);
+      throw error;
+    }
+  } else {
+    throw new Error('Please install MetaMask');
+  }
+};
+```
 
 
