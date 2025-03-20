@@ -29,7 +29,7 @@ Before setting up the backend, make sure you have the following installed:
 
 ## **Setting Up Hardhat**
 
-First, we’ll initialize Hardhat in your project and set up the configuration for deployment.
+First, we’ll initialize Hardhat in our project and set up the configuration for deployment.
 
 ### Step 1: Install Hardhat and Dependencies
 
@@ -49,7 +49,7 @@ npx hardhat
 Follow the prompts to create a basic project.
 
 ### Step 3: Configure Hardhat for Polygon Mumbai
-In **`hardhat.config.js`**, set up your network configuration to deploy to Polygon Mumbai.
+In **`hardhat.config.js`**, set up the network configuration to deploy to Polygon Mumbai.
 ```javascript
 require('@nomiclabs/hardhat-ethers');
 require('dotenv').config();
@@ -65,11 +65,14 @@ module.exports = {
 };
 
 ```
-You’ll need to create a **`.env`** file to store sensitive information:
+It is important to create a **`.env`** file to store sensitive information:
 ```env
 INFURA_PROJECT_ID=your-infura-project-id
 PRIVATE_KEY=your-wallet-private-key
 ```
+where:
+- `INFURA_PROJECT_ID` is the Infura project ID
+- `PRIVATE_KEY` is the private key of the wallet.
 
 ## **Creating the SMART Contract**
 For the impementation of the SMART contract, we will be writing the contract with Solidity, a programming language that is used to write SMART contracts on the Ethereum blockchain.
