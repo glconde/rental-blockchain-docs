@@ -378,7 +378,7 @@ We will create a function to allow the property manager to terminate an active r
 
 ### **The Final Contract**
 
-``` solidity
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
@@ -548,7 +548,26 @@ Now that Hardhat is set up, you can deploy your contract to the Polygon Mumbai t
 
 ### Step 1: Create a Deployment Script
 In the **`scripts/`** folder, create a file called **`deploy.js`**:
-**insert deployment code details here***
+```javascript
+async function main() {
+  const [deployer] = await ethers.getSigners();
+  console.log("Deploying contracts with the account:", deployer.address);
+
+  const RentalProperty = await ethers.getContractFactory("RentalProperty");
+  const contract = await RentalProperty.deploy();
+  console.log("Contract deployed to:", contract.address);
+}
+
+// other code here
+
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+
+```
 
 ### Step 2: Deploy the SMART Contract
 Run the following command to deploy your contract to the Polygon Mumbai testnet:
@@ -595,6 +614,7 @@ app.get('/rentals/:id', async (req, res) => {
   }
 });
 
+// make sure port 3000 is unused
 app.listen(3000, () => {
   console.log('Backend is running on port 3000');
 });
