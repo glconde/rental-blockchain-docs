@@ -10,7 +10,7 @@ This guide will help you set up the backend for your rental smart contract dApp 
 3. [Creating the Smart Contract](#creating-the-smart-contract)
 4. [Deploying to Testnet](#deploying-to-testnet)
 5. [Setting Up the Backend](#setting-up-the-backend)
-6. [Frontend Integration (Airbnb-like)](#frontend-integration-airbnb-like)
+6. [Frontend Integration](#frontend-integration)
 7. [Smart Contract Interaction](#smart-contract-interaction)
 8. [Future Enhancements](#future-enhancements)
 
@@ -612,5 +612,50 @@ You can interact with your contract from the backend by calling the appropriate 
 
 - Get Rental Info: You can fetch the rental information by calling getRentalInfo(rentalId) from your contract.
 
-## **Frontend Integration using Next.js**
-The frontend will be built to mimic the Airbnb experience, where users can browse, book rentals, and interact with smart contracts for payments and booking management.
+## **Frontend Integration**
+The frontend will be built using **Next.js**, where users can browse, book rentals, and interact with smart contracts for payments and booking management.
+
+### Step 1: Setup a Next.js project
+
+**System Requirements**
+
+Ensure that you have the latest version of **[Node.js](https://nodejs.org/)** installed on your computer.
+Create a directory to store the project. Open a terminal and run the following command:
+```bash
+npx create-next-app@latest
+```
+
+On installation, you will be prompted with options for the project:
+
+```bash
+What is your project named? my-app
+Would you like to use TypeScript? No / Yes
+Would you like to use ESLint? No / Yes
+Would you like to use Tailwind CSS? No / Yes
+Would you like your code inside a `src/` directory? No / Yes
+Would you like to use App Router? (recommended) No / Yes
+Would you like to use Turbopack for `next dev`?  No / Yes
+Would you like to customize the import alias (`@/*` by default)? No / Yes
+What import alias would you like configured? @/*
+```
+Enter your project name and select the options listed in the table below:
+|Options| Recommended selection|
+|-------|-----------|
+|Would you like to use TypeScript?|No|
+|Would you like to use ESLint?|Yes|
+|Would you like to use Tailwind CSS?|No|
+|Would you like your code inside a `src/` directory?|No|
+|Would you like to use App Router? (recommended)|Yes|
+|Would you like to use Turbopack for `next dev`?|Yes|
+|Would you like to customize the import alias (`@/*` by default)?|No|
+
+After the prompts `create-next-app` will create a folder with your project name and install all the necessary dependencies.
+
+### Step 2: Design the frontend
+
+The frontend will be design using **JavaScript** and **CSS**. Major sections of each page will be created as reusable `components` with their independent functionality, some of which will connect to the backend servers to interact.
+
+
+
+
+
