@@ -124,9 +124,9 @@ contract RentalProperty {
         address tenantAddress;      // Tenant's wallet address
         uint256 rentAmount;  // Monthly rent
         uint256 depositAmount;   // Security deposit
-        uint256 lateFee;         // New: Fee for late payments
-        uint256 rentDueDate;     // New: Timestamp for next rent due
-        uint256 rentInterval;    // New: Interval between rent payments (e.g., 30 days)
+        uint256 lateFee;         // Fee for late payments
+        uint256 rentDueDate;     // Timestamp for next rent due
+        uint256 rentInterval;    // Interval between rent payments (e.g., 30 days)
         RentalStatus status; // Current status of the rental
         uint256 startTime;   // Start timestamp
         uint256 endTime;     // End timestamp (0 if not ended)
@@ -392,11 +392,11 @@ contract RentalProperty {
     struct Rental {
         string propertyId;
         address tenant;
-        uint256 rentAmount;      // Monthly rent in wei
-        uint256 depositAmount;   // New: Security deposit
-        uint256 lateFee;         // New: Fee for late payments
-        uint256 rentDueDate;     // New: Timestamp for next rent due
-        uint256 rentInterval;    // New: Interval between rent payments (e.g., 30 days)
+        uint256 rentAmount;      
+        uint256 depositAmount;   
+        uint256 lateFee;         
+        uint256 rentDueDate;     
+        uint256 rentInterval;
         RentalStatus status;
         uint256 startTime;
         uint256 endTime;
@@ -440,7 +440,7 @@ contract RentalProperty {
         _;
     }
 
-    // New: Toggle pause state
+    // Optional: Toggle pause state
     function setPaused(bool _paused) public onlyOwner {
         paused = _paused;
         emit ContractPaused(_paused);
@@ -545,7 +545,7 @@ contract RentalProperty {
 ```
 ## **Deploying to Testnet**
 
-Now that Hardhat is set up, you can deploy your contract to the Polygon Mumbai testnet.
+Now that Hardhat is set up, we can deploy the rental SMART contract to the Polygon Mumbai testnet.
 
 ### Step 1: Create a Deployment Script
 In the **`scripts/`** folder, create a file called **`deploy.js`**:
@@ -571,12 +571,12 @@ main()
 ```
 
 ### Step 2: Deploy the SMART Contract
-Run the following command to deploy your contract to the Polygon Mumbai testnet:
+Run the following command to deploy the rental SMART contract to the Polygon Mumbai testnet:
 
 ```bash
 npx hardhat run scripts/deploy.js --network mumbai
 ```
-Once deployed, note the contract address that’s printed in the console. You’ll use this to interact with the contract from your backend.
+Once deployed, the contract address will be printed in the console. This contract address will be used to interact with the rental SMART contract from both the frontend and backend.
 
 ## Setting Up the Backend
 Now, let’s set up the backend server to interact with the deployed smart contract.
