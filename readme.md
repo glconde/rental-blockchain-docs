@@ -10,9 +10,8 @@ This guide will help you set up the backend for your rental smart contract dApp 
 3. [Creating the Smart Contract](#creating-the-smart-contract)
 4. [Deploying to Testnet](#deploying-to-testnet)
 5. [Setting Up the Backend](#setting-up-the-backend)
-6. [Frontend Integration](#frontend-integration)
-7. [Smart Contract Interaction](#smart-contract-interaction)
-8. [Future Enhancements](#future-enhancements)
+6. [Frontend Integration with SMART Contract](#frontend-integration-with-smart-contract)
+7. [Future Enhancements](#future-enhancements)
 
 ---
 
