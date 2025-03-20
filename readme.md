@@ -656,11 +656,11 @@ we will now install the necessary dependencies to connect to our SMART contract 
 npm install ethers @web3-react/core @web3-react/injected-connector
 ```
 
-### Step 2: Design the frontend
+### Step 2: Design the Frontend
 
 The frontend will be design using **JavaScript** and **CSS**. Major sections of each page will be created with reusable `components` where some of these components will interact with the SMART contract.
 
-### Step 3: Connect front-end to SMART contract
+### Step 3: Connect Frontend to SMART contract
 
 
 1. After deploying the contract, we will need two pieces of information to connect to the contract on the Ethereum blockchain.
@@ -671,10 +671,10 @@ Create a directory call `lib/` and store these values in a file called `contract
 
 
 ```javascript
-export const contractAddress = "0xYourDeployedContractAddress";
+export const contractAddress = "0xYourDeployedContractAddress"; // Replace with the contract address
 
 export const contractABI = [
-  // Your ABI here (example snippet)
+  // Your ABI here (here is an example snippet)
   {
     "inputs": [
       {"internalType": "string", "name": "_propertyId", "type": "string"},
